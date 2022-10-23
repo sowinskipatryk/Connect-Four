@@ -10,15 +10,15 @@ function drawGameboard()
 		}
 		htmlCode += "</tr>";
 	}
-	document.querySelector('table').innerHTML = htmlCode;
+	$('table')[0].innerHTML = htmlCode;
 }
 
 drawGameboard();
 
 var gameStarted = true;
 var turn = (Math.random() > 0.5) ? "blue" : "red";
-var cells = document.querySelectorAll("td");
-var info = document.querySelector("#info");
+var cells = $("td");
+var info = $("#info")[0];
 
 function changeTurn()
 {
@@ -98,8 +98,25 @@ function editCell()
 {
 	if (this.className === "" && gameStarted)
 	{
-		if (turn === "blue") this.className = "blueChips";
-		else this.className = "redChips";
+		var currId = this.id;
+		var col = parseInt(currId[0]);
+		var row = currId[1];
+		while(col < 5)
+		{
+			nextId = "#"+(col+1)+""+row;
+			if ($(nextId)[0].className === "")
+			{
+				col++;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		if (turn === "blue") $("#"+col+""+row)[0].className = "blueChips";
+		else $("#"+col+""+row)[0].className = "redChips";
+			
 		changeTurn();
 		gameOver();
 	}
@@ -108,9 +125,4 @@ function editCell()
 for (cell of cells)
 {
 	cell.addEventListener("click", editCell);
-}
-
-function chipDrop()
-{
-	
 }
