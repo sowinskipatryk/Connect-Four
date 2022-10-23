@@ -12,12 +12,18 @@
 	padding-bottom: 20px;
 }
 
+table#gameboard
+{
+	border-spacing: 2px;
+	border-collapse: separate;
+}
+
 td
 {
 	height: 75px;
 	width: 75px;
 	border-radius: 40px;
-	border: 5px #302a2a solid;
+	border: 3px #302a2a solid;
 	cursor: pointer;
 	background: linear-gradient(150deg, #b4c1c6 0%,#56595c 100%);
 	box-shadow: inset -8px -7px 4px 0px rgba(0,0,0,0.3);

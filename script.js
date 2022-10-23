@@ -6,7 +6,7 @@ function drawGameboard()
 		htmlCode += "<tr>";
 		for (j=0;j<7;j++)
 		{
-			htmlCode += "<td></td>";
+			htmlCode += "<td id='"+i+j+"'></td>";
 		}
 		htmlCode += "</tr>";
 	}
@@ -29,25 +29,74 @@ function changeTurn()
 
 function gameOver()
 {
-	if (false)
+	function freeze()
+	{
+		gameStarted = false;
+		if (turn == "red")
 		{
-			if (turn == "red")
-			{
 			info.textContent = "Blue wins!";
-			} else {
+		} 
+		else 
+		{
 			info.textContent = "Red wins!";
-			}
-			gameStarted = false;
-			for (cell of cells)
+		}
+		
+		for (cell of cells)
+		{
+			cell.style.cursor = "default";
+		}
+	}
+	
+	for (i=0;i<6;i++)
+	{
+		for (j=0;j<4;j++)
+		{
+			if (($('#'+i+''+j+'')[0].className === $('#'+i+''+(j+1)+'')[0].className &&
+			$('#'+i+''+(j+1)+'')[0].className === $('#'+i+''+(j+2)+'')[0].className &&
+			$('#'+i+''+(j+2)+'')[0].className === $('#'+i+''+(j+3)+'')[0].className &&
+			$('#'+i+''+j+'')[0].className != ''))
 			{
-				cell.style.cursor = "default";
+				freeze()
 			}
 		}
+	}
+	
+	for (i=0;i<3;i++)
+	{
+		for (j=0;j<7;j++)
+		{
+			if (($('#'+i+''+j+'')[0].className === $('#'+(i+1)+''+j+'')[0].className &&
+			$('#'+(i+1)+''+j+'')[0].className === $('#'+(i+2)+''+j+'')[0].className &&
+			$('#'+(i+2)+''+j+'')[0].className === $('#'+(i+3)+''+j+'')[0].className &&
+			$('#'+i+''+j+'')[0].className != ''))
+			{
+				freeze()
+			}
+		}
+	}
+	
+	for (i=0;i<3;i++)
+	{
+		for (j=0;j<4;j++)
+		{
+			if ((($('#'+i+''+j+'')[0].className === $('#'+(i+1)+''+(j+1)+'')[0].className &&
+			$('#'+(i+1)+''+(j+1)+'')[0].className === $('#'+(i+2)+''+(j+2)+'')[0].className &&
+			$('#'+(i+2)+''+(j+2)+'')[0].className === $('#'+(i+3)+''+(j+3)+'')[0].className &&
+			$('#'+i+''+j+'')[0].className != '')) ||
+			(($('#'+i+''+(j+3)+'')[0].className === $('#'+(i+1)+''+(j+2)+'')[0].className &&
+			$('#'+(i+1)+''+(j+2)+'')[0].className === $('#'+(i+2)+''+(j+1)+'')[0].className &&
+			$('#'+(i+2)+''+(j+1)+'')[0].className === $('#'+(i+3)+''+j+'')[0].className &&
+			$('#'+i+''+(j+3)+'')[0].className != '')))
+			{
+				freeze()
+			}
+		}
+	}
 }
 
 function editCell()
 {
-	if (this.className === "")
+	if (this.className === "" && gameStarted)
 	{
 		if (turn === "blue") this.className = "blueChips";
 		else this.className = "redChips";
@@ -56,12 +105,9 @@ function editCell()
 	}
 }
 
-var cellNum = 0;
 for (cell of cells)
 {
 	cell.addEventListener("click", editCell);
-	cell.id = cellNum;
-	cellNum++;
 }
 
 function chipDrop()
